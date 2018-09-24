@@ -4,7 +4,7 @@
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/memclutter/confparse)
 [![Build Status](https://travis-ci.com/memclutter/confparse.svg?branch=master)](https://travis-ci.com/memclutter/confparse)
 
-Parser of configuration files for golang projects.
+Configuration files parser for golang projects.
 
 ## Example
 
