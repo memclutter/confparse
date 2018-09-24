@@ -1,5 +1,7 @@
 # Confparse
 
+[![Language Golang](https://img.shields.io/badge/language-golang-blue.svg)](https://img.shields.io/badge/language-golang-blue.svg)
+
 Parser of configuration files for golang projects.
 
 ## Example
