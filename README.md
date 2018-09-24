@@ -1,6 +1,7 @@
 # Confparse
 
 [![Language Golang](https://img.shields.io/badge/language-golang-blue.svg)](https://img.shields.io/badge/language-golang-blue.svg)
+[![Build Status](https://travis-ci.com/memclutter/confparse.svg?branch=master)](https://travis-ci.com/memclutter/confparse)
 
 Parser of configuration files for golang projects.
 
