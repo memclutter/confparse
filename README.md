@@ -61,7 +61,7 @@ func main() {
 		log.Fatalf("Error parse configuration: %s", err)
 	}
 
-    log.Printf("API Key: %s", appConfig.ApiKey)
+        log.Printf("API Key: %s", appConfig.ApiKey)
 
 	log.Printf("Listen and serve on %s", appConfig.Addr)
 	if err := http.ListenAndServe(appConfig.Addr, nil); err != nil {
