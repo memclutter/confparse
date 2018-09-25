@@ -2,6 +2,7 @@ package confparse
 
 import (
 	"flag"
+	"os"
 	"reflect"
 	"strconv"
 	"time"
@@ -15,10 +16,10 @@ func Parse(container interface{}) error {
 	// Find all fields and read tag
 	for i := 0; i < typ.NumField(); i++ {
 
-		name, value, usage := extractTags(typ.Field(i).Tag)
+		name, value, usage, envVar := extractTags(typ.Field(i).Tag)
 		addr := val.Field(i).Addr().Interface()
 
-		if err := declareFlag(name, value, usage, addr); err != nil {
+		if err := declareFlag(name, value, usage, envVar, addr); err != nil {
 			return err
 		}
 	}
@@ -37,15 +38,24 @@ func determine(container interface{}) (val reflect.Value, typ reflect.Type) {
 }
 
 // Extract container field tags values
-func extractTags(tags reflect.StructTag) (name, value, help string) {
+func extractTags(tags reflect.StructTag) (name, value, help, envVar string) {
 	name = tags.Get("name")
 	value = tags.Get("value")
 	help = tags.Get("usage")
+	envVar = tags.Get("envVar")
 	return
 }
 
 // Declare CLI argument
-func declareFlag(name, value, usage string, addr interface{}) error {
+func declareFlag(name, value, usage, envVar string, addr interface{}) error {
+
+	// read environment variable and set as default value
+	if envVar != "" {
+		envValue := os.Getenv(envVar)
+		if envValue != "" {
+			value = envValue
+		}
+	}
 
 	switch ptr := addr.(type) {
 

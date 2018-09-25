@@ -14,21 +14,25 @@ type testParseContainer struct {
 	DatabaseUrl string        `name:"databaseUrl" value:"mongodb://localhost:27017/db" usage:"Database connection url"`
 	Timeout     time.Duration `name:"timeout" value:"200ms" usage:"Timeout value"`
 	OptionalVal string        `name:"optional"`
+	ApiKey      string        `name:"apiKey" envVar:"API_KEY" usage:"API key"`
 }
 
 var testParseTable = []struct {
 	container         *testParseContainer
 	args              []string
+	environment       map[string]string
 	exceptedContainer *testParseContainer
 }{
 	{
 		&testParseContainer{},
 		[]string{"-addr", "localhost:8000"},
-		&testParseContainer{Addr: "localhost:8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 200 * time.Millisecond},
+		map[string]string{"API_KEY": "test-key"},
+		&testParseContainer{Addr: "localhost:8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 200 * time.Millisecond, ApiKey: "test-key"},
 	},
 	{
 		&testParseContainer{},
 		[]string{"-timeout", "30s"},
+		map[string]string{},
 		&testParseContainer{Addr: ":8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 30 * time.Second},
 	},
 }
@@ -39,6 +43,14 @@ func TestParse(t *testing.T) {
 
 			// clear flags
 			flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+
+			// clear env vars
+			os.Clearenv()
+
+			// set environment vars
+			for key, value := range tt.environment {
+				os.Setenv(key, value)
+			}
 
 			// insert arguments
 			os.Args = []string{"test"}
