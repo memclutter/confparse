@@ -78,6 +78,13 @@ func declareFlag(name, value, usage, envVar string, addr interface{}) error {
 			flag.IntVar(ptr, name, v, usage)
 		}
 
+	case *int64:
+		if v, err := toInt64(value); err != nil {
+			return err
+		} else {
+			flag.Int64Var(ptr, name, v, usage)
+		}
+
 	// Time duration argument type
 	case *time.Duration:
 		if v, err := toTimeDuration(value); err != nil {
@@ -104,6 +111,14 @@ func toBool(value string) (result bool, err error) {
 func toInt(value string) (result int, err error) {
 	if value != "" {
 		result, err = strconv.Atoi(value)
+	}
+
+	return
+}
+
+func toInt64(value string) (result int64, err error) {
+	if value != "" {
+		result, err = strconv.ParseInt(value, 10, 64)
 	}
 
 	return
