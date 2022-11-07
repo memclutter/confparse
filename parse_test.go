@@ -18,6 +18,8 @@ type testParseContainer struct {
 	BatchSize   int           `name:"batchSize" envVar:"BATCH_SIZE" usage:"Batch size for query"`
 	MaxCount    int64         `name:"maxCount"`
 	Debug       bool          `name:"debug" envVar:"DEBUG"`
+	Profit      uint          `name:"profit"`
+	MegaProfit  uint64        `name:"megaProfit"`
 }
 
 var testParseTable = []struct {
@@ -55,6 +57,12 @@ var testParseTable = []struct {
 		[]string{"-maxCount", "850300"},
 		map[string]string{},
 		&testParseContainer{Addr: ":8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 200 * time.Millisecond, MaxCount: 850300},
+	},
+	{
+		&testParseContainer{},
+		[]string{"-profit", "100", "-megaProfit", "500000"},
+		map[string]string{},
+		&testParseContainer{Addr: ":8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 200 * time.Millisecond, Profit: 100, MegaProfit: 500000},
 	},
 }
 

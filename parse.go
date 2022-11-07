@@ -85,6 +85,20 @@ func declareFlag(name, value, usage, envVar string, addr interface{}) error {
 			flag.Int64Var(ptr, name, v, usage)
 		}
 
+	case *uint:
+		if v, err := toUint(value); err != nil {
+			return err
+		} else {
+			flag.UintVar(ptr, name, v, usage)
+		}
+
+	case *uint64:
+		if v, err := toUint64(value); err != nil {
+			return err
+		} else {
+			flag.Uint64Var(ptr, name, v, usage)
+		}
+
 	// Time duration argument type
 	case *time.Duration:
 		if v, err := toTimeDuration(value); err != nil {
@@ -102,6 +116,26 @@ func declareFlag(name, value, usage, envVar string, addr interface{}) error {
 func toBool(value string) (result bool, err error) {
 	if value != "" {
 		result, err = strconv.ParseBool(value)
+	}
+
+	return
+}
+
+func toUint(value string) (result uint, err error) {
+	if value != "" {
+		result, err := strconv.ParseUint(value, 10, 64)
+		if err != nil {
+			return 0, err
+		}
+		return uint(result), nil
+	}
+
+	return
+}
+
+func toUint64(value string) (result uint64, err error) {
+	if value != "" {
+		result, err = strconv.ParseUint(value, 10, 64)
 	}
 
 	return
