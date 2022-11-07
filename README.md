@@ -2,9 +2,18 @@
 
 [![Language Golang](https://img.shields.io/badge/language-golang-blue.svg)](https://img.shields.io/badge/language-golang-blue.svg)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://github.com/memclutter/confparse)
-[![Build Status](https://travis-ci.com/memclutter/confparse.svg?branch=master)](https://travis-ci.com/memclutter/confparse)
+[![codecov](https://codecov.io/gh/memclutter/confparse/branch/main/graph/badge.svg?token=G0U5MRSSFZ)](https://codecov.io/gh/memclutter/confparse)
+[![Go](https://github.com/memclutter/confparse/actions/workflows/go.yml/badge.svg)](https://github.com/memclutter/confparse/actions/workflows/go.yml)
 
 Declarative command line argument parser for golang projects. 
+
+## Install
+
+Install go module
+
+```shell
+go get github.com/memclutter/confparse
+```
 
 ## Usage
 
