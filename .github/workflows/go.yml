@@ -1,0 +1,30 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  test:
+    strategy:
+      matrix:
+        go_version: [ '1.14', '1.15', '1.16', '1.17' ]
+        os: [ 'ubuntu-latest', 'windows-latest', 'macOS-latest' ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use GO ${{ matrix.go_version }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go_version }}
+
+      - name: Test GO ${{ matrix.go_version }}
+        run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
+
+      - name: Upload to codecov
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.go_version == '1.17' }}
+        run: bash <(curl -s https://codecov.io/bash)
