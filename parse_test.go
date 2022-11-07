@@ -4,6 +4,8 @@ import (
 	"flag"
 	"github.com/stretchr/testify/assert"
 	"os"
+	"runtime"
+	"strings"
 	"testing"
 	"time"
 )
@@ -119,39 +121,42 @@ type testParseErrorsDurationContainer struct {
 
 func TestParseErrors(t *testing.T) {
 	var testingTable = []struct {
-		title  string
-		actual interface{}
-		error  string
+		title       string
+		actual      interface{}
+		errorMatrix map[string]string
 	}{
 		{
 			"Invalid bool default value throw error",
 			&testParseErrorsBoolContainer{},
-			`strconv.ParseBool: parsing "foo": invalid syntax`,
+			map[string]string{"": `strconv.ParseBool: parsing "foo": invalid syntax`},
 		},
 		{
 			"Invalid int default value throw error",
 			&testParseErrorsIntContainer{},
-			`strconv.Atoi: parsing "abc": invalid syntax`,
+			map[string]string{"": `strconv.Atoi: parsing "abc": invalid syntax`},
 		},
 		{
 			"Invalid int64 default value throw error",
 			&testParseErrorsInt64Container{},
-			`strconv.ParseInt: parsing "abc": invalid syntax`,
+			map[string]string{"": `strconv.ParseInt: parsing "abc": invalid syntax`},
 		},
 		{
 			"Invalid uint default value throw error",
 			&testParseErrorsUintContainer{},
-			`strconv.ParseUint: parsing "-100": invalid syntax`,
+			map[string]string{"": `strconv.ParseUint: parsing "-100": invalid syntax`},
 		},
 		{
 			"Invalid uint64 default value throw error",
 			&testParseErrorsUint64Container{},
-			`strconv.ParseUint: parsing "-1000": invalid syntax`,
+			map[string]string{"": `strconv.ParseUint: parsing "-1000": invalid syntax`},
 		},
 		{
 			"Invalid duration default value throw error",
 			&testParseErrorsDurationContainer{},
-			`time: invalid duration "bad"`,
+			map[string]string{
+				"":       `time: invalid duration "bad"`,
+				"go1.14": `time: invalid duration bad`,
+			},
 		},
 	}
 
@@ -165,7 +170,12 @@ func TestParseErrors(t *testing.T) {
 			os.Args = []string{"test"}
 
 			// testing run
-			assert.EqualError(t, Parse(tt.actual), tt.error, "must be parse without errors")
+			minorVersion := strings.Join(strings.Split(runtime.Version(), ".")[:len(strings.Split(runtime.Version(), "."))-1], ".")
+			exceptedError := tt.errorMatrix[minorVersion]
+			if len(exceptedError) == 0 {
+				exceptedError = tt.errorMatrix[""]
+			}
+			assert.EqualError(t, Parse(tt.actual), exceptedError, "must be parse without errors")
 		})
 	}
 }
