@@ -15,6 +15,9 @@ type testParseContainer struct {
 	Timeout     time.Duration `name:"timeout" value:"200ms" usage:"Timeout value"`
 	OptionalVal string        `name:"optional"`
 	ApiKey      string        `name:"apiKey" envVar:"API_KEY" usage:"API key"`
+	BatchSize   int           `name:"batchSize" envVar:"BATCH_SIZE" usage:"Batch size for query"`
+	MaxCount    int64         `name:"maxCount"`
+	Debug       bool          `name:"debug" envVar:"DEBUG"`
 }
 
 var testParseTable = []struct {
@@ -34,6 +37,24 @@ var testParseTable = []struct {
 		[]string{"-timeout", "30s"},
 		map[string]string{},
 		&testParseContainer{Addr: ":8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 30 * time.Second},
+	},
+	{
+		&testParseContainer{},
+		[]string{"-batchSize", "10000"},
+		map[string]string{},
+		&testParseContainer{Addr: ":8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 200 * time.Millisecond, BatchSize: 10000},
+	},
+	{
+		&testParseContainer{},
+		[]string{"-debug"},
+		map[string]string{},
+		&testParseContainer{Addr: ":8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 200 * time.Millisecond, Debug: true},
+	},
+	{
+		&testParseContainer{},
+		[]string{"-maxCount", "850300"},
+		map[string]string{},
+		&testParseContainer{Addr: ":8000", DatabaseUrl: "mongodb://localhost:27017/db", Timeout: 200 * time.Millisecond, MaxCount: 850300},
 	},
 }
 
