@@ -8,6 +8,8 @@ While the major version is `0`, the public API may change in any release.
 
 ## [Unreleased]
 
+## [0.0.4] - 2026-06-28
+
 ### Added
 
 - `CONTRIBUTING.md` describing setup, the test/lint workflow, code style, and the
@@ -66,7 +68,8 @@ First release of `confparse` — a declarative command-line argument parser for 
 - Environment extension: when a field's `envVar` variable is set and non-empty,
   its value becomes the field's default.
 
-[Unreleased]: https://github.com/memclutter/confparse/compare/v0.0.3...HEAD
+[Unreleased]: https://github.com/memclutter/confparse/compare/v0.0.4...HEAD
+[0.0.4]: https://github.com/memclutter/confparse/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/memclutter/confparse/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/memclutter/confparse/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/memclutter/confparse/releases/tag/v0.0.1
