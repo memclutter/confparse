@@ -14,6 +14,15 @@ While the major version is `0`, the public API may change in any release.
   commit/PR/release process.
 - This `CHANGELOG.md`.
 
+### Fixed
+
+- CI is green again. The GitHub Actions workflow tested Go 1.14–1.17, which have
+  no `darwin/arm64` builds and so failed to install on the now-Apple-Silicon
+  `macOS-latest` runners, cancelling the whole matrix. The workflow now tests the
+  module's real floor (`1.18`) plus the two latest Go releases, sets
+  `fail-fast: false`, and upgrades to `actions/checkout@v4`,
+  `actions/setup-go@v5`, and `codecov/codecov-action@v5`.
+
 ### Changed
 
 - Relicensed the project from the Apache License 2.0 to the MIT License.
