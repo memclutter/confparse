@@ -1,4 +1,4 @@
-name: Go
+name: CI
 
 on:
   push:
@@ -10,21 +10,28 @@ jobs:
 
   test:
     strategy:
+      fail-fast: false
       matrix:
-        go_version: [ '1.14', '1.15', '1.16', '1.17' ]
+        # 1.18 is the module floor (go.mod); oldstable/stable track the two
+        # most recent Go releases.
+        go-version: [ '1.18', 'oldstable', 'stable' ]
         os: [ 'ubuntu-latest', 'windows-latest', 'macOS-latest' ]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Use GO ${{ matrix.go_version }}
-        uses: actions/setup-go@v2
+      - name: Use Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go_version }}
+          go-version: ${{ matrix.go-version }}
 
-      - name: Test GO ${{ matrix.go_version }}
+      - name: Test
         run: go test ./... -race -coverprofile=coverage.txt -covermode=atomic
 
-      - name: Upload to codecov
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.go_version == '1.17' }}
-        run: bash <(curl -s https://codecov.io/bash)
+      - name: Upload coverage to Codecov
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.go-version == 'stable' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.txt
+          fail_ci_if_error: false
